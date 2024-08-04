@@ -13,7 +13,9 @@ provider "aws" {
   region  = "ap-northeast-1"
 }
 
+# ---------------------------------------------
 # Step Functionsの実行ロール
+# ---------------------------------------------
 resource "aws_iam_role" "step_function_role" {
   name = "step_function_role"
 
@@ -31,7 +33,9 @@ resource "aws_iam_role" "step_function_role" {
   })
 }
 
-# IAMポリシーの作成
+# ---------------------------------------------
+# Step Functionsの実行用ポリシー
+# ---------------------------------------------
 resource "aws_iam_policy" "step_functions_policy" {
   name        = "step_functions_execution_policy"
   path        = "/"
@@ -52,13 +56,17 @@ resource "aws_iam_policy" "step_functions_policy" {
   })
 }
 
-# 既存のIAMロールにポリシーをアタッチ
+# ---------------------------------------------
+# Step Functionsのロールとポリシーの紐付け
+# ---------------------------------------------
 resource "aws_iam_role_policy_attachment" "step_functions_policy_attachment" {
   role       = aws_iam_role.step_function_role.name
   policy_arn = aws_iam_policy.step_functions_policy.arn
 }
 
-
+# ---------------------------------------------
+# メインのStatemachine
+# ---------------------------------------------
 module "main_sfn" {
   source          = "./modules/stepfunctions"
   name            = "main_sfn"
@@ -69,10 +77,13 @@ module "main_sfn" {
   }
 }
 
+# ---------------------------------------------
+# サブのStatemachine
+# ---------------------------------------------
 module "nested_sfn" {
   source          = "./modules/stepfunctions"
   name            = "nested_sfn"
   role_arn        = aws_iam_role.step_function_role.arn
   definition_file = "./asls/nested_sfn.asl.json"
-  definition_vars = {} // 変数の置換が不要なので空のマップを渡します
+  definition_vars = {}
 }

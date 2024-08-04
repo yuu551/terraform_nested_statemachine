@@ -1,44 +1,44 @@
 {
-	"StartAt": "StartMainProcess",
-	"States": {
-	  "StartMainProcess": {
-		"Type": "Task",
-		"Resource": "arn:aws:states:::states:startExecution",
-		"Parameters": {
-		  "StateMachineArn": "${nested_state_machine_arn}",
-		  "Input": {
-			"ExecutionInput.$": "$"
-		  }
-		},
-		"ResultPath": "$.nested",
-		"Next": "WaitForNestedExecution"
-	  },
-	  "WaitForNestedExecution": {
-		"Type": "Wait",
-		"Seconds": 30,
-		"Next": "CheckNestedExecution"
-	  },
-	  "CheckNestedExecution": {
-		"Type": "Task",
-		"Resource": "arn:aws:states:::aws-sdk:sfn:describeExecution",
-		"Parameters": {
-		  "ExecutionArn.$": "$.nested.ExecutionArn"
-		},
-		"Next": "IsNestedExecutionComplete"
-	  },
-	  "IsNestedExecutionComplete": {
-		"Type": "Choice",
-		"Choices": [
-		  {
-			"Variable": "$.Status",
-			"StringEquals": "RUNNING",
-			"Next": "WaitForNestedExecution"
-		  }
-		],
-		"Default": "FinishMainProcess"
-	  },
-	  "FinishMainProcess": {
-		"Type": "Succeed"
-	  }
-	}
+  "StartAt": "StartMainProcess",
+  "States": {
+    "StartMainProcess": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution",
+      "Parameters": {
+        "StateMachineArn": "${nested_state_machine_arn}",
+        "Input": {
+          "ExecutionInput.$": "$"
+        }
+      },
+      "ResultPath": "$.nested",
+      "Next": "WaitForNestedExecution"
+    },
+    "WaitForNestedExecution": {
+      "Type": "Wait",
+      "Seconds": 30,
+      "Next": "CheckNestedExecution"
+    },
+    "CheckNestedExecution": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:sfn:describeExecution",
+      "Parameters": {
+        "ExecutionArn.$": "$.nested.ExecutionArn"
+      },
+      "Next": "IsNestedExecutionComplete"
+    },
+    "IsNestedExecutionComplete": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.Status",
+          "StringEquals": "RUNNING",
+          "Next": "WaitForNestedExecution"
+        }
+      ],
+      "Default": "FinishMainProcess"
+    },
+    "FinishMainProcess": {
+      "Type": "Succeed"
+    }
   }
+}

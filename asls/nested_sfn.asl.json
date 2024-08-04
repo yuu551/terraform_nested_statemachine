@@ -1,17 +1,17 @@
 {
-    "StartAt": "WaitState",
-    "States": {
-      "WaitState": {
-        "Type": "Wait",
-        "Seconds": 10,
-        "Next": "PassState"
+  "StartAt": "WaitState",
+  "States": {
+    "WaitState": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "PassState"
+    },
+    "PassState": {
+      "Type": "Pass",
+      "Result": {
+        "message": "Nested execution completed"
       },
-      "PassState": {
-        "Type": "Pass",
-        "Result": {
-          "message": "Nested execution completed"
-        },
-        "End": true
-      }
+      "End": true
     }
   }
+}
