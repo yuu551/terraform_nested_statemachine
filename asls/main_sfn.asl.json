@@ -1,44 +1,17 @@
 {
-  "StartAt": "StartMainProcess",
+  "StartAt": "ExcuteNestedStateMachine",
   "States": {
-    "StartMainProcess": {
+    "ExcuteNestedStateMachine": {
       "Type": "Task",
-      "Resource": "arn:aws:states:::states:startExecution",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
       "Parameters": {
         "StateMachineArn": "${nested_state_machine_arn}",
         "Input": {
-          "ExecutionInput.$": "$"
+          "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
         }
       },
       "ResultPath": "$.nested",
-      "Next": "WaitForNestedExecution"
-    },
-    "WaitForNestedExecution": {
-      "Type": "Wait",
-      "Seconds": 30,
-      "Next": "CheckNestedExecution"
-    },
-    "CheckNestedExecution": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::aws-sdk:sfn:describeExecution",
-      "Parameters": {
-        "ExecutionArn.$": "$.nested.ExecutionArn"
-      },
-      "Next": "IsNestedExecutionComplete"
-    },
-    "IsNestedExecutionComplete": {
-      "Type": "Choice",
-      "Choices": [
-        {
-          "Variable": "$.Status",
-          "StringEquals": "RUNNING",
-          "Next": "WaitForNestedExecution"
-        }
-      ],
-      "Default": "FinishMainProcess"
-    },
-    "FinishMainProcess": {
-      "Type": "Succeed"
+      "End": true
     }
   }
 }

@@ -48,7 +48,12 @@ resource "aws_iam_policy" "step_functions_policy" {
         Effect = "Allow"
         Action = [
           "states:StartExecution",
-          "states:DescribeExecution"
+          "states:DescribeExecution",
+          "states:StopExecution",
+          "events:PutTargets",
+          "events:PutRule",
+          "events:DescribeRule",
+          "events:CreateRule"
         ]
         Resource = "*"
       }
