@@ -1,7 +1,7 @@
 {
-  "StartAt": "ExcuteNestedStateMachine",
+  "StartAt": "ExecuteNestedStateMachine",
   "States": {
-    "ExcuteNestedStateMachine": {
+    "ExecuteNestedStateMachine": {
       "Type": "Task",
       "Resource": "arn:aws:states:::states:startExecution.sync:2",
       "Parameters": {

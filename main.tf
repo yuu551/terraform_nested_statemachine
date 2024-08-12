@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = "terraform"
+  profile = "private-tf"
   region  = "ap-northeast-1"
 }
 
