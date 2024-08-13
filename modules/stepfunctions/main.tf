@@ -1,5 +1,5 @@
 # ---------------------------------------------
-# Stef Functions(Module)
+# ステートマシン(Module)
 # ---------------------------------------------
 resource "aws_sfn_state_machine" "this" {
   name     = var.name

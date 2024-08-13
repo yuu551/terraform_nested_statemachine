@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "step_functions_policy_attachment" {
 }
 
 # ---------------------------------------------
-# メインのStatemachine
+# 親ステートマシン
 # ---------------------------------------------
 module "main_sfn" {
   source          = "./modules/stepfunctions"
@@ -82,7 +82,7 @@ module "main_sfn" {
 }
 
 # ---------------------------------------------
-# サブのStatemachine
+# 子ステートマシン
 # ---------------------------------------------
 module "nested_sfn" {
   source          = "./modules/stepfunctions"
