@@ -36,10 +36,10 @@ resource "aws_iam_role" "state_machine_role" {
 # ---------------------------------------------
 # ステートマシンの実行用ポリシー
 # ---------------------------------------------
-resource "aws_iam_policy" "step_functions_policy" {
-  name        = "step_functions_execution_policy"
+resource "aws_iam_policy" "state_machine_policy" {
+  name        = "state_machine_execution_policy"
   path        = "/"
-  description = "IAM policy for Step Functions execution"
+  description = "IAM policy for State Machine execution"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -66,7 +66,7 @@ resource "aws_iam_policy" "step_functions_policy" {
 # ---------------------------------------------
 resource "aws_iam_role_policy_attachment" "step_functions_policy_attachment" {
   role       = aws_iam_role.state_machine_role.name
-  policy_arn = aws_iam_policy.step_functions_policy.arn
+  policy_arn = aws_iam_policy.state_machine_policy.arn
 }
 
 # ---------------------------------------------
