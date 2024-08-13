@@ -9,6 +9,7 @@ terraform {
 }
 
 provider "aws" {
+  profile = "private-tf"
   region  = "ap-northeast-1"
 }
 
@@ -71,23 +72,23 @@ resource "aws_iam_role_policy_attachment" "step_functions_policy_attachment" {
 # ---------------------------------------------
 # 親ステートマシン
 # ---------------------------------------------
-module "main_sfn" {
-  source          = "./modules/stepfunctions"
-  name            = "main_sfn"
+module "main_state" {
+  source          = "./modules/statemachine"
+  name            = "main_state"
   role_arn        = aws_iam_role.state_machine_role.arn
-  definition_file = "./asls/main_sfn.asl.json"
+  definition_file = "./asls/main_state.asl.json"
   definition_vars = {
-    nested_state_machine_arn = module.nested_sfn.arn
+    nested_state_machine_arn = module.nested_state.arn
   }
 }
 
 # ---------------------------------------------
 # 子ステートマシン
 # ---------------------------------------------
-module "nested_sfn" {
-  source          = "./modules/stepfunctions"
-  name            = "nested_sfn"
+module "nested_state" {
+  source          = "./modules/statemachine"
+  name            = "nested_state"
   role_arn        = aws_iam_role.state_machine_role.arn
-  definition_file = "./asls/nested_sfn.asl.json"
+  definition_file = "./asls/nested_state.asl.json"
   definition_vars = {}
 }
